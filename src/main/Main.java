@@ -46,18 +46,57 @@ public class Main {
 			case 5:
 				listarCoche();
 				break;
+			case 6:
+				int opcionPasajeros = -1;
+				do {
+					System.out.println("Escribe la opción del menú");
+					menuPasajeros();
+					opcionPasajeros = sc.nextInt();
+					switch(opcionPasajeros) {
+					case 1:
+						
+						break;
+					case 2:
+						
+						break;
+					case 3:
+						
+						break;
+					case 4:
+						
+						break;
+					case 5:
+						
+						break;
+					case 6:
+						
+						break;
+					}
+				}while(opcionPasajeros !=0);
+				break;
 			case 0:
 				break;
 			}
 		}while(opcion!=0);
 	}
-	//menu de usuario
+	//menu de opciones de usuario principal
 	public static void menu() {
 		System.out.println("1->Añadir nuevo coche");
 		System.out.println("2->Borrar coche por ID");
 		System.out.println("3->Consultar coche por ID");
 		System.out.println("4->Modificar coche por ID");
 		System.out.println("5->Listado de coches");
+		System.out.println("6->Gestion de pasajeros");
+		System.out.println("0->Terminar programa");
+	}
+	//menu de pasajeros
+	public static void menuPasajeros() {
+		System.out.println("1->Crear un nuevo pasajero);");
+		System.out.println("2->Borrar pasajero por id");
+		System.out.println("3->Consulta pasajero por id");
+		System.out.println("4->Listar todos los pasajeros");
+		System.out.println("5->Añadir pasajero a coche");
+		System.out.println("6->Listar todos los pasajeros de un coche");
 		System.out.println("0->Terminar programa");
 	}
 	//metodo que llama a la interfaz que crea un usuario en la base de datos con el objeto

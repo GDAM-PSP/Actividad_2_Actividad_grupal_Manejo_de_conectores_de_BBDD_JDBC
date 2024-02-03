@@ -14,45 +14,19 @@ import modelo.persistencia.interfaces.DaoCoche;
 
 public class DaoCocheMySql implements DaoCoche{
 
+	private DaoMySql conectar = new DaoMySql();
 	private Connection conexion;
-	
-	//abre la conexion con la base de datos
-	public boolean abrirConexion() {
-		//Estamos iniciando el fichero properties para poder realizar su lectura
-		Configuracion conf = new Configuracion();
-		conf.inicializar();
-		
-		//Cargamos las propiedades del fichero config.properties
-		String url = conf.getProperty("url");
-		String usuario = conf.getProperty("usuario");
-		String password = conf.getProperty("password");
-		try {
-			//Si todo va bien se hará la conexión
-			conexion = DriverManager.getConnection(url,usuario,password);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return false;
-		}
-		return true;
-	}
-	//Cierra la conexion de la base de datos
-	public boolean cerrarConexion() {
-		try {
-			conexion.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return false;
-		}
-		return true;
-	}
+
 	//añade el coche con los datos proporcionados y crea automaticamente un id que no existe
 	@Override
 	public boolean anadir(Coche c) {
-		if(!abrirConexion()){
+		
+		conexion = conectar.abrirConexion(conexion);
+		
+		if(conexion == null){
 			return false;
 		}
+		
 		boolean alta = true;
 		String query = "insert into coches (MARCA,MODELO,AÑO,KM)"
 				+ "values(?,?,?,?)";
@@ -73,7 +47,7 @@ public class DaoCocheMySql implements DaoCoche{
 			e.printStackTrace();
 			return false;
 		}finally {
-			cerrarConexion();
+			conectar.cerrarConexion(conexion);
 		}
 		
 		
@@ -82,7 +56,10 @@ public class DaoCocheMySql implements DaoCoche{
 	//borra el coche con el id que le mandas
 	@Override
 	public boolean borrar(int id) {
-		if(!abrirConexion()) {
+
+		conexion = conectar.abrirConexion(conexion);
+		
+		if(conexion == null){
 			return false;
 		}
 		
@@ -103,14 +80,17 @@ public class DaoCocheMySql implements DaoCoche{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}finally {
-			cerrarConexion();
+			conectar.cerrarConexion(conexion);
 		}
 		return borrar;
 	}
 	//consulta el coche que le mandes buscando su id
 	@Override
 	public Coche consultar(int id) {
-		if(!abrirConexion()) {
+		
+		conexion = conectar.abrirConexion(conexion);
+		
+		if(conexion == null){
 			return null;
 		}
 		
@@ -137,7 +117,7 @@ public class DaoCocheMySql implements DaoCoche{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}finally {
-			cerrarConexion();
+			conectar.cerrarConexion(conexion);
 		}
 		
 		
@@ -146,9 +126,12 @@ public class DaoCocheMySql implements DaoCoche{
 	//modifica el objeto que le mandes segun el id que lo usa como buscador
 	@Override
 	public boolean modificar(Coche c) {
-	    if (!abrirConexion()) {
-	        return false;
-	    }
+		
+		conexion = conectar.abrirConexion(conexion);
+		
+		if(conexion == null){
+			return false;
+		}
 	    
 	    boolean modificado = true;
 	    String query = "UPDATE `coches` SET `marca`=?, `modelo`=?, `año`=?, `km`=? WHERE `id`=?";
@@ -173,7 +156,7 @@ public class DaoCocheMySql implements DaoCoche{
 	        e.printStackTrace();
 	        modificado = false;
 	    } finally {
-	        cerrarConexion();
+	    	conectar.cerrarConexion(conexion);
 	    }
 
 	    return modificado;
@@ -181,7 +164,10 @@ public class DaoCocheMySql implements DaoCoche{
 	//Lista todos los objetos coche que hay en la base de datos
 	@Override
 	public List<Coche> listar() {
-		if(!abrirConexion()) {
+
+		conexion = conectar.abrirConexion(conexion);
+		
+		if(conexion == null){
 			return null;
 		}
 		
