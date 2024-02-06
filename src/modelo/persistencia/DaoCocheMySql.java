@@ -1,16 +1,13 @@
 package modelo.persistencia;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import modelo.configuracion.Configuracion;
 import modelo.entidad.Coche;
-import modelo.persistencia.interfaces.DaoCoche;
 
 public class DaoCocheMySql implements DaoCoche{
 
@@ -53,6 +50,7 @@ public class DaoCocheMySql implements DaoCoche{
 		
 		return alta;
 	}
+	
 	//borra el coche con el id que le mandas
 	@Override
 	public boolean borrar(int id) {

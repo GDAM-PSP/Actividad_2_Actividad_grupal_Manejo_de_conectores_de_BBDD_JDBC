@@ -1,18 +1,21 @@
 package main;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 import modelo.entidad.Coche;
+import modelo.entidad.Pasajero;
+import modelo.negocio.GestorCoche;
+import modelo.negocio.GestorPasajero;
+import modelo.persistencia.DaoCoche;
 import modelo.persistencia.DaoCocheMySql;
-import modelo.persistencia.interfaces.DaoCoche;
 
 public class Main {
 	
 	private static Scanner sc = new Scanner(System.in);
 	
-	private static DaoCoche coche = new DaoCocheMySql();
+	private static GestorCoche gestorCoche = new GestorCoche();
+	private static GestorPasajero gestorPasajero = new GestorPasajero();
 	
 	public static void main(String args[]) {
 		System.out.println("Empieza el programa");
@@ -54,7 +57,11 @@ public class Main {
 					opcionPasajeros = sc.nextInt();
 					switch(opcionPasajeros) {
 					case 1:
-						
+						if(gestorPasajero.anadir()) {
+							System.out.println("Pasajero creado");
+						} else {
+							System.out.println("No se ha podido crear el pasajero");
+						}
 						break;
 					case 2:
 						
@@ -79,6 +86,7 @@ public class Main {
 			}
 		}while(opcion!=0);
 	}
+	
 	//menu de opciones de usuario principal
 	public static void menu() {
 		System.out.println("1->Añadir nuevo coche");
@@ -99,6 +107,7 @@ public class Main {
 		System.out.println("6->Listar todos los pasajeros de un coche");
 		System.out.println("0->Terminar programa");
 	}
+	
 	//metodo que llama a la interfaz que crea un usuario en la base de datos con el objeto
 	//que se le proporciona
 	public static boolean anadirCoche() {
@@ -111,11 +120,10 @@ public class Main {
 		c.setAnio(sc.nextInt());
 		System.out.println("Escribe los kilometros del coche");
 		c.setKm(sc.nextInt());
-		if(coche.anadir(c)) {
-			return true;
-		}
-		return false;
+
+		return gestorCoche.anadir(c);
 	}
+	
 	//metodo que llama a la interfaz que modifica un usuario en la base de datos por el objeto
 	//que se le proporciona
 	public static boolean modificarCoche() {
@@ -127,20 +135,19 @@ public class Main {
 		c.setMarca(sc.nextLine());
 		System.out.println("Escribe el modelo nuevo del coche");
 		c.setModelo(sc.nextLine());
-		System.out.println("Escribe el año nuevo de fabricación del coche");
+		System.out.println("Escribe el nuevo año de fabricación del coche");
 		c.setAnio(sc.nextInt());
 		System.out.println("Escribe los kilometros totales nuevos del coche");
 		c.setKm(sc.nextInt());
-		if(coche.modificar(c)) {
-			return true;
-		}
-		return false;
+
+		return gestorCoche.modificar(c);
 	}
+	
 	//metodo que llama a la interfaz que devuelve una consulta con el coche id a consultar
 	public static boolean consultarCoche() {
 		System.out.println("Escribe el id del coche que quieres consultar");
 		int id = sc.nextInt();
-		Coche c = coche.consultar(id);
+		Coche c = gestorCoche.consultar(id);
 		if(c == null) {
 			System.out.println("El coche con id "+id+" no a sido encontrado");
 			return false;
@@ -149,22 +156,24 @@ public class Main {
 		System.out.println(c.toString());
 		return true;
 	}
+	
 	//metodo que llama a la interfaz que devuelve una consulta que elimina un coche
 	//de la base de datos
 	public static boolean borrarCoche() {
 		System.out.println("Escribe el id del coche que quieres borrar");
 		int id = sc.nextInt();
-		if(coche.borrar(id) == false) {
+		if(gestorCoche.borrar(id) == false) {
 			System.out.println("El coche con id "+id+" no a sido borrado");
 			return false;
 		}
 		System.out.println("El coche con id "+id+" a sido borrado");
 		return true;
 	}
+	
 	//metodo que llama a la interfaz que devuelve una consulta con todos los coches 
 	//de la base de datos
 	public static boolean listarCoche() {
-		List<Coche> coches = coche.listar();
+		List<Coche> coches = gestorCoche.listar();
 		for(Coche c : coches) {
 			System.out.println(c);
 		}
