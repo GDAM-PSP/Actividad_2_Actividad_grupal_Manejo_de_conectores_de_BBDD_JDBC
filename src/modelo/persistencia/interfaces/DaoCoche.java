@@ -9,8 +9,12 @@ import modelo.entidad.Coche;
 //y los metodos del usuario
 public interface DaoCoche {
 	public boolean anadir(Coche c);
+
 	public boolean borrar(int id);
+
 	public Coche consultar(int id);
+
 	public boolean modificar(Coche c);
+
 	public List<Coche> listar();
 }

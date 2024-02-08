@@ -67,7 +67,6 @@ public class GestorCoche {
 	public List<Coche> listar(){
 		List<Coche> coches = daoCoche.listar();
 		return coches;
-		
 	}
 	
 	
