@@ -6,7 +6,7 @@ public class Coche {
 	private String modelo;
 	private int anio;
 	private int km;
-	
+
 	public Coche(int id, String marca, String modelo, int anio, int km) {
 		super();
 		this.id = id;
@@ -15,8 +15,9 @@ public class Coche {
 		this.anio = anio;
 		this.km = km;
 	}
+
 	public Coche() {
-		
+
 	}
 
 	public int getId() {
@@ -58,10 +59,11 @@ public class Coche {
 	public void setKm(int km) {
 		this.km = km;
 	}
+
 	@Override
 	public String toString() {
-		return "Coche [id=" + id + ", marca=" + marca + ", modelo=" + modelo + ", anio=" + anio + ", km=" + km + "]";
+		return "Coche:\n" + "   ID: " + id + "\n" + "   Marca: " + marca + "\n" + "   Modelo: " + modelo + "\n"
+				+ "   Año: " + anio + "\n" + "   Kilometraje: " + km + "\n";
 	}
-	
-	
+
 }
