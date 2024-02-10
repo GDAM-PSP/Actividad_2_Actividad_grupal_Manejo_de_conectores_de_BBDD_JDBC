@@ -32,7 +32,7 @@ public class GestorPasajero {
 
 	/**
 	 * Metodo que recibe el int ID Pasajero de la vista para solicitar a DAO la
-	 * eliminacion
+	 * eliminacion del pasajero
 	 * 
 	 * @param id El id pasajero que se desea borrar
 	 * @return true/false>> si se ha borrado con exito.
@@ -78,9 +78,14 @@ public class GestorPasajero {
 		return asignado;
 	}
 
-	public List<Pasajero> listar_asignados(int id_coche) {
-		List<Pasajero> pasajero = daoPasajero.listar_asignados(id_coche);
+	public List<Pasajero> listar_asignado(int id_coche) {
+		List<Pasajero> pasajero = daoPasajero.listar_asignado(id_coche);
 		return pasajero;
 	}
 
+	public boolean desasignar(int id_pasajero) {
+		daoPasajero.desasignar(id_pasajero);
+		return false;
+
+	}
 }

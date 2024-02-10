@@ -62,8 +62,8 @@ public class Coche {
 
 	@Override
 	public String toString() {
-		return "Coche:\n" + "   ID: " + id + "\n" + "   Marca: " + marca + "\n" + "   Modelo: " + modelo + "\n"
-				+ "   Año: " + anio + "\n" + "   Kilometraje: " + km + "\n";
+		return "\n[Coche:\n" + "   ID: " + id + "\n" + "   Marca: " + marca + "\n" + "   Modelo: " + modelo + "\n"
+				+ "   Año: " + anio + "\n" + "   Kilometraje: " + km + "\n]";
 	}
 
 }

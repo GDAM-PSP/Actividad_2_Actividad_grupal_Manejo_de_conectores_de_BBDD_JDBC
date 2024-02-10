@@ -135,11 +135,12 @@ public class Main {
 
 						break;
 					case 6:
+						gestorPasajero.desasignar(3);
 						break;
 					case 7:
 						System.out.println("Introduzca un ID COCHE para buscar pasajeros asociados: ");
 						aux = sc.nextInt();
-						System.out.println(gestorPasajero.listar_asignados(aux));
+						System.out.println(gestorPasajero.listar_asignado(aux));
 						break;
 					case 0:
 						break;
