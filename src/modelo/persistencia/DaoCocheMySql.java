@@ -144,12 +144,10 @@ public class DaoCocheMySql implements DaoCoche {
 			pr.setInt(3, c.getAnio());
 			pr.setInt(4, c.getKm());
 			pr.setInt(5, c.getId());
-
+			
 			// si se han echo cambios devolvera mas de 0 filas
 			int numeroFilasAfectadas = pr.executeUpdate();
-			if (numeroFilasAfectadas == 0) {
-				modificado = false;
-			}
+			modificado = (numeroFilasAfectadas > 0);
 
 		} catch (SQLException e) {
 			System.out.println("modificar -> error al modificar el coche " + c);

@@ -19,7 +19,7 @@ public interface DaoPasajero {
 
 	public List<Pasajero> listar_asignado(int id_coche);
 
-	public List<Pasajero> listar_asignados();
+	public List<Pasajero> listar_asignados_coche();
 
 	public List<Pasajero> listar();
 }

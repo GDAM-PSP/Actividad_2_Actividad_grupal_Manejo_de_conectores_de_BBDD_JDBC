@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import modelo.entidad.Coche;
 import modelo.entidad.Pasajero;
 import modelo.persistencia.interfaces.DaoPasajero;
 
@@ -81,7 +80,6 @@ public class DaoPasajeroMySql implements DaoPasajero {
 	 */
 	public Pasajero consultar(int id) {
 		// TODO Auto-generated method stub
-		boolean consultar = true;
 		conexion = conectar.abrirConexion(conexion);
 		if (conexion == null) {
 			return null;
@@ -130,7 +128,7 @@ public class DaoPasajeroMySql implements DaoPasajero {
 			return null;
 		}
 		List<Pasajero> pasajeros = new ArrayList<>();
-		String query = "SELECT id,nombre,edad,peso FROM pasajero";
+		String query = "SELECT * FROM pasajero";
 		try (PreparedStatement ps = conexion.prepareStatement(query);) {
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
@@ -162,17 +160,17 @@ public class DaoPasajeroMySql implements DaoPasajero {
 		if (conexion == null) {
 			return false;
 		}
-		boolean asignar = false;
 		String query = "UPDATE `pasajero` SET `id_coche`=? WHERE `id`=?";
 		try (PreparedStatement ps = conexion.prepareStatement(query);) {
 			ps.setInt(1, id_coche);
 			ps.setInt(2, id_pasajero);
-			ps.executeUpdate();
+			int count = ps.executeUpdate();
+			return (count > 0);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return asignar;
+		return false;
 	}
 
 	/**
@@ -217,62 +215,50 @@ public class DaoPasajeroMySql implements DaoPasajero {
 	public boolean desasignar(int id_pasajero) {
 
 		// SOLO VAMOS A MOSTRAR COCHES CON PASAJEROS
-//
-//		conexion = conectar.abrirConexion(conexion);
-//		if (conexion == null) {
-//			return false;
-//		}
-//		List<Pasajero> pasajeros_asignados = new ArrayList<>();
-//		String query = "SELECT id,nombre,id_coche FROM pasajero WHERE IS NOT NULL";
-//		try (PreparedStatement ps = conexion.prepareStatement(query);) {
-//			ResultSet rs = ps.executeQuery();
-//			while (rs.next()) {
-//				Pasajero p = new Pasajero();
-//				p.setId_pasajero(rs.getInt(1));
-//				p.setNombre(rs.getString(2));
-//				p.setId_coche(rs.getInt(3));
-//				pasajeros_asignados.add(p);
-//			}
-//			System.out.println(pasajeros_asignados.toString());
-//		} catch (SQLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+
+		conexion = conectar.abrirConexion(conexion);
+		if (conexion == null) {
+			return false;
+		}
+		String query = "UPDATE `pasajero` SET `id_coche`=NULL WHERE `id`=?";
+		try (PreparedStatement ps = conexion.prepareStatement(query);) {
+			ps.setInt(1, id_pasajero);
+			int count = ps.executeUpdate();
+			return (count > 0);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return false;
 	}
 
 	@Override
-	public List<Pasajero> listar_asignados() {
-		// TODO Auto-generated method stub
+	public List<Pasajero> listar_asignados_coche() {
 		conexion = conectar.abrirConexion(conexion);
 		if (conexion == null) {
 			return null;
 		}
 		List<Pasajero> pasajeros_asignados = new ArrayList<>();
-		String query = "SELECT id,nombre,id_coche FROM pasajero WHERE `id_coche`IS NOT NULL";
-		String query2 = "SELECT id,nombre FROM pasajero WHERE `id_coche`IS NOT NULL";
-		// TODO Auto-generated method stub
+		String query = "SELECT * FROM pasajero WHERE id_coche IS NOT NULL";
+		
 		try (PreparedStatement ps = conexion.prepareStatement(query);) {
-			// ps.setInt(1, id_coche);
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 				Pasajero p = new Pasajero();
 				p.setId_pasajero(rs.getInt(1));
 				p.setNombre(rs.getString(2));
-				p.setId_coche(3);
+				p.setEdad(rs.getInt(3));
+				p.setPeso(rs.getFloat(4));
+				p.setId_coche(rs.getInt(5));
 				pasajeros_asignados.add(p);
-				ArrayList<Integer> lista_ids = new ArrayList<Integer>();
-				for (Pasajero p_aux : pasajeros_asignados) {
-					int id_coche = p_aux.getId_coche();
-					lista_ids.add(id_coche);
-				}
 			}
 
 			return pasajeros_asignados;
+			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 		return pasajeros_asignados;
 	}
 }
