@@ -1,87 +1,160 @@
 package modelo.presentacion;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 import modelo.entidad.Coche;
-import modelo.persistencia.DaoCocheMySql;
-import modelo.persistencia.interfaces.DaoCoche;
+import modelo.entidad.Pasajero;
+import modelo.negocio.GestorCoche;
+import modelo.negocio.GestorPasajero;
 
 public class Main {
 
-	private static Scanner sc = new Scanner(System.in);
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
 
-	private static DaoCoche coche = new DaoCocheMySql();
+		// INICIALIZACION DE VARIABLES
 
-	public static void main(String args[]) {
-		System.out.println("Empieza el programa");
-		int opcion;
+		Scanner sc = new Scanner(System.in);
+		int seleccion;
+		int aux;
+
+		GestorCoche gestorCoche = new GestorCoche();
+		GestorPasajero gestorPasajero = new GestorPasajero();
+
+		// EJECUCION PRINCIPAL
+
 		do {
-			System.out.println("Escribe una opción del menú");
 			menu();
-			opcion = sc.nextInt();
-			sc.nextLine();
-			switch (opcion) {
+			System.out.print("Seleccione una opción: ");
+			seleccion = sc.nextInt();
+			System.out.println("\n--------------------------------------------------");
+			Pasajero paux = new Pasajero();
+			Coche caux = new Coche();
+			switch (seleccion) {
 			case 1:
-				if (anadirCoche()) {
-					System.out.println("Coche añadido correctamente");
-				} else {
-					System.out.println("Coche no a podido ser añadido");
-				}
+				System.out.println("Introduzca Marca");
+				caux.setMarca(sc.next());
+				System.out.println("Introduzca Modelo");
+				caux.setModelo(sc.next());
+				System.out.println("Introduzca Año");
+				caux.setAnio(sc.nextInt());
+				System.out.println("Introduzca Kilometraje");
+				caux.setKm(sc.nextInt());
+				int result = gestorCoche.anadir(caux);
+				if (result == 0)
+					System.out.println("Coche agregado correctamente");
+				else
+					System.out.println("No se ha podido agregar el coche revise los datos");
 				break;
+
 			case 2:
-				borrarCoche();
+				System.out.println("Indique ID para borrar el coche");
+				aux = sc.nextInt();
+				boolean borrado = gestorCoche.borrar(aux);
+				if (borrado)
+					System.out.println("Coche con ID " + aux + " Borrado de la base de datos");
+				else
+					System.out.println("El coche no ha podido ser eliminado.");
 				break;
+
 			case 3:
-				consultarCoche();
+				System.out.println("Indique ID para buscar coche");
+				caux = gestorCoche.consultar(sc.nextInt());
+				System.out.println(caux.toString());
 				break;
+
 			case 4:
-				if (modificarCoche()) {
-					System.out.println("Coche modificado correctamente");
-				} else {
-					System.out.println("Coche no se a podido modifiacr");
-				}
+				System.out.println("Indique ID para modificar coche");
+				caux = gestorCoche.consultar(sc.nextInt());
+				System.out.println("El coche seleecionado es el siguiente: "); // IMPLEMENTAR SELECTOR DE EDICIÓN
+				System.out.println(caux.toString());
+				System.out.println("Escribe la marca nueva del coche");
+				caux.setMarca(sc.next());
+				System.out.println("Escribe el modelo nuevo del coche");
+				caux.setModelo(sc.next());
+				System.out.println("Escribe el año nuevo de fabricación del coche");
+				caux.setAnio(sc.nextInt());
+				System.out.println("Escribe los kilometros totales nuevos del coche");
+				caux.setKm(sc.nextInt());
+				int mod = gestorCoche.modificar(caux);
+				if (mod != 0)
+					System.out.println("El coche no ha sido agregado, revise los datos *MARCA *MODELO ");
+				else
+					System.out.println("Coche modificado con éxito");
 				break;
+
 			case 5:
-				listarCoche();
+				System.out.println(gestorCoche.listar().toString());
 				break;
 			case 6:
-				int opcionPasajeros = -1;
 				do {
-					System.out.println("Escribe la opción del menú");
+					System.out.println("Selecione una opcion");
 					menuPasajeros();
-					opcionPasajeros = sc.nextInt();
-					switch (opcionPasajeros) {
+					seleccion = sc.nextInt();
+					System.out.println("\n--------------------------------------------------");
+					switch (seleccion) {
 					case 1:
-
+						System.out.println("Introduzca Nombre");
+						paux.setNombre(sc.next());
+						System.out.println("Introduzca Edad");
+						paux.setEdad(sc.nextInt());
+						System.out.println("Introduzca Peso");
+						paux.setPeso(sc.nextFloat());
+						boolean agregado_pasajero = gestorPasajero.agregar(paux);
+						if (agregado_pasajero)
+							System.out.println("Pasajero agregado correctamente");
+						else
+							System.out.println("No se ha podido agregar el pasajero revise los datos");
 						break;
 					case 2:
-
+						System.out.println("Introduzca un ID para Borrar: ");
+						aux = sc.nextInt();
+						boolean borrado_pasajero = gestorPasajero.borrar(aux);
+						if (borrado_pasajero)
+							System.out.println("Se ha borrado el pasajero con ID" + aux + " de la BBDD");
+						else
+							System.out.println("No se ha podido borrar el pasajero");
 						break;
 					case 3:
-
+						System.out.println("Introduzca un ID para buscar un pasajero: ");
+						paux = gestorPasajero.consultar(sc.nextInt());
+						System.out.println(paux.toString());
 						break;
 					case 4:
-
+						System.out.println(gestorPasajero.listar().toString());
 						break;
 					case 5:
+						System.out
+								.println("A continuacion se solicitan ID PASAJERO e ID COCHE para asignar al vehiculo");
+						System.out.println(gestorPasajero.listar().toString());
+						System.out.println("INTRODUZCA ID PASAJERO: ");
+						aux = sc.nextInt();
+						System.out.println(gestorCoche.listar().toString());
+						System.out.println("INTRODUZCA ID COCHE A ASIGNAR: ");
+						gestorPasajero.asignar(aux, sc.nextInt());
 
 						break;
 					case 6:
-
 						break;
+					case 7:
+						System.out.println("Introduzca un ID COCHE para buscar pasajeros asociados: ");
+						aux = sc.nextInt();
+						System.out.println(gestorPasajero.listar_asignados(aux));
+						break;
+					case 0:
+						break;
+
 					}
-				} while (opcionPasajeros != 0);
+				} while (seleccion != 0);
 				break;
-			case 0:
-				break;
+
 			}
-		} while (opcion != 0);
+		} while (seleccion != 0);
+		System.out.println(">>FINALIZANDO EJECUCIÓN");
 	}
 
-	// menu de opciones de usuario principal
 	public static void menu() {
+		System.out.println("\n=== Menú Principal ===");
 		System.out.println("1->Añadir nuevo coche");
 		System.out.println("2->Borrar coche por ID");
 		System.out.println("3->Consultar coche por ID");
@@ -91,93 +164,15 @@ public class Main {
 		System.out.println("0->Terminar programa");
 	}
 
-	// menu de pasajeros
 	public static void menuPasajeros() {
-		System.out.println("1->Crear un nuevo pasajero);");
+		System.out.println("\n=== Gestión de Pasajeros ===");
+		System.out.println("1->Crear un nuevo pasajero");
 		System.out.println("2->Borrar pasajero por id");
 		System.out.println("3->Consulta pasajero por id");
 		System.out.println("4->Listar todos los pasajeros");
 		System.out.println("5->Añadir pasajero a coche");
-		System.out.println("6->Listar todos los pasajeros de un coche");
+		System.out.println("6->Elminar pasajero de coche");
+		System.out.println("7->Listar todos los pasajeros de un coche");
 		System.out.println("0->Terminar programa");
-	}
-
-	// metodo que llama a la interfaz que crea un usuario en la base de datos con el
-	// objeto
-	// que se le proporciona
-	public static boolean anadirCoche() {
-		Coche c = new Coche();
-		System.out.println("Escribe la marca del coche");
-		c.setMarca(sc.nextLine());
-		System.out.println("Escribe el modelo del coche");
-		c.setModelo(sc.nextLine());
-		System.out.println("Escribe el año del coche");
-		c.setAnio(sc.nextInt());
-		System.out.println("Escribe los kilometros del coche");
-		c.setKm(sc.nextInt());
-		if (coche.anadir(c)) {
-			return true;
-		}
-		return false;
-	}
-
-	// metodo que llama a la interfaz que modifica un usuario en la base de datos
-	// por el objeto
-	// que se le proporciona
-	public static boolean modificarCoche() {
-		Coche c = new Coche();
-		System.out.println("Escribe el id del coche a modificar");
-		c.setId(sc.nextInt());
-		sc.nextLine();
-		System.out.println("Escribe la marca nueva del coche");
-		c.setMarca(sc.nextLine());
-		System.out.println("Escribe el modelo nuevo del coche");
-		c.setModelo(sc.nextLine());
-		System.out.println("Escribe el año nuevo de fabricación del coche");
-		c.setAnio(sc.nextInt());
-		System.out.println("Escribe los kilometros totales nuevos del coche");
-		c.setKm(sc.nextInt());
-		if (coche.modificar(c)) {
-			return true;
-		}
-		return false;
-	}
-
-	// metodo que llama a la interfaz que devuelve una consulta con el coche id a
-	// consultar
-	public static boolean consultarCoche() {
-		System.out.println("Escribe el id del coche que quieres consultar");
-		int id = sc.nextInt();
-		Coche c = coche.consultar(id);
-		if (c == null) {
-			System.out.println("El coche con id " + id + " no a sido encontrado");
-			return false;
-		}
-		System.out.println("El coche con id " + id + " a sido encontrado:");
-		System.out.println(c.toString());
-		return true;
-	}
-
-	// metodo que llama a la interfaz que devuelve una consulta que elimina un coche
-	// de la base de datos
-	public static boolean borrarCoche() {
-		System.out.println("Escribe el id del coche que quieres borrar");
-		int id = sc.nextInt();
-		if (coche.borrar(id) == false) {
-			System.out.println("El coche con id " + id + " no a sido borrado");
-			return false;
-		}
-		System.out.println("El coche con id " + id + " a sido borrado");
-		return true;
-	}
-
-	// metodo que llama a la interfaz que devuelve una consulta con todos los coches
-	// de la base de datos
-	public static boolean listarCoche() {
-		List<Coche> coches = coche.listar();
-		for (Coche c : coches) {
-			System.out.println(c);
-		}
-		return false;
 	}
 }

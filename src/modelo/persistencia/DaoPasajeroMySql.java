@@ -17,24 +17,26 @@ public class DaoPasajeroMySql implements DaoPasajero {
 	private Connection conexion;
 
 	@Override
-	public boolean anadir(Pasajero p) {
-		/**
-		 * Metodo para añadir un pasajero a BBDD
-		 * 
-		 * @param p El objeto pasajero que se desea añadir
-		 * @return devuelve booleano en caso de agregar true
-		 */
+	/**
+	 * Metodo para insertar un pasajero realizando conexion a BBDD
+	 * 
+	 * @param p El objeto pasajero que se desea añadir
+	 * @return true/false>> si se ha agregado con exito.
+	 */
+
+	public boolean agregar(Pasajero p) {
 		conexion = conectar.abrirConexion(conexion);
 		if (conexion == null) {
 			return false;
 		}
 		boolean alta = false;
-		String query = "insert into pasajeros (NOMBRE,EDAD,PESO)" + "values(?,?,?)";
+		String query = "INSERT INTO pasajero (NOMBRE,EDAD,PESO)" + "values(?,?,?)";
 		try (PreparedStatement ps = conexion.prepareStatement(query);) {
 			ps.setString(1, p.getNombre());
 			ps.setInt(2, p.getEdad());
 			ps.setFloat(3, p.getPeso());
 			alta = true;
+			ps.executeUpdate();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -44,6 +46,12 @@ public class DaoPasajeroMySql implements DaoPasajero {
 	}
 
 	@Override
+	/**
+	 * Metodo para borrar un pasajero realizando conexion a BBDD
+	 * 
+	 * @param id El objeto pasajero que se desea borrar
+	 * @return true/false>> si se ha borrado con exito.
+	 */
 	public boolean borrar(int id) {
 		// TODO Auto-generated method stub
 		conexion = conectar.abrirConexion(conexion);
@@ -51,7 +59,7 @@ public class DaoPasajeroMySql implements DaoPasajero {
 			return false;
 		}
 		boolean borrar = false;
-		String query = "Delete from pasajeros where id = ?";
+		String query = "DELETE FROM pasajero WHERE id = ?";
 		try (PreparedStatement ps = conexion.prepareStatement(query);) {
 			ps.setInt(1, id);
 			ps.executeUpdate();
@@ -65,6 +73,12 @@ public class DaoPasajeroMySql implements DaoPasajero {
 	}
 
 	@Override
+	/**
+	 * Metodo para consultar un pasajero realizando conexion a BBDD
+	 * 
+	 * @param id El objeto pasajero que se desea consultar
+	 * @return Pasajero>> develve objeto consultado.
+	 */
 	public Pasajero consultar(int id) {
 		// TODO Auto-generated method stub
 		boolean consultar = true;
@@ -73,42 +87,11 @@ public class DaoPasajeroMySql implements DaoPasajero {
 			return null;
 		}
 		Pasajero p = new Pasajero();
-		String query = "select * from pasajeros where id=?";
+		String query = "SELECT * FROM pasajero WHERE id=?";
 		try (PreparedStatement ps = conexion.prepareStatement(query);) {
 			ps.setInt(1, id);
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
-				p.setId_pasajero(rs.getInt(1));
-				p.setNombre(rs.getString(2));
-				p.setEdad(rs.getInt(3));
-				p.setPeso(rs.getFloat(id));
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return p;
-	}
-
-	@Override
-	public boolean modificar(Pasajero p) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public List<Pasajero> listar() {
-		// TODO Auto-generated method stub
-		conexion = conectar.abrirConexion(conexion);
-		if (conexion == null) {
-			return null;
-		}
-		List<Pasajero> pasajeros = new ArrayList<>();
-		String query = "SELECT id,nombre,edad,peso FROM pasajeros";
-		try (PreparedStatement ps = conexion.prepareStatement(query);) {
-			ResultSet rs = ps.executeQuery();
-			while (rs.next()) {
-				Pasajero p = new Pasajero();
 				p.setId_pasajero(rs.getInt(1));
 				p.setNombre(rs.getString(2));
 				p.setEdad(rs.getInt(3));
@@ -118,6 +101,109 @@ public class DaoPasajeroMySql implements DaoPasajero {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return null;
+		return p;
+	}
+
+//	@Override
+//	/**
+//	 * Metodo para modificar un pasajero realizando conexion a BBDD
+//	 * 
+//	 * @param p El objeto pasajero que se desea modificar
+//	 * @return true/false>> si se ha modificado con exito.
+//	 */
+
+//	public boolean modificar(Pasajero p) {
+//		// TODO Auto-generated method stub
+//		return false;
+//	}
+
+	@Override
+	/**
+	 * Metodo para listar los pasajeros realizando conexion a BBDD
+	 * 
+	 * @return List>> devuelve lista de pasajeros
+	 */
+	public List<Pasajero> listar() {
+		// TODO Auto-generated method stub
+		conexion = conectar.abrirConexion(conexion);
+		if (conexion == null) {
+			return null;
+		}
+		List<Pasajero> pasajeros = new ArrayList<>();
+		String query = "SELECT id,nombre,edad,peso FROM pasajero";
+		try (PreparedStatement ps = conexion.prepareStatement(query);) {
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				Pasajero p = new Pasajero();
+				p.setId_pasajero(rs.getInt(1));
+				p.setNombre(rs.getString(2));
+				p.setEdad(rs.getInt(3));
+				p.setPeso(rs.getFloat(4));
+				pasajeros.add(p);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return pasajeros;
+	}
+
+	@Override
+
+	/**
+	 * Metodo para asignar un pasajero a un coche en BBDD
+	 * 
+	 * @param id_pasajero ID del pasajero a asignar
+	 * @param id_coche    ID del coche a asignar
+	 * @return true/false>> Devuelve boolean si consigue asignar el pasajero
+	 */
+	public boolean asignar(int id_pasajero, int id_coche) {
+		conexion = conectar.abrirConexion(conexion);
+		if (conexion == null) {
+			return false;
+		}
+		boolean asignar = false;
+		String query = "UPDATE `pasajero` SET `id_coche`=? WHERE `id`=?";
+		try (PreparedStatement ps = conexion.prepareStatement(query);) {
+			ps.setInt(1, id_coche);
+			ps.setInt(2, id_pasajero);
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return asignar;
+	}
+
+	@Override
+	/**
+	 * Metodo para listar los pasajeros asociados al coche seleccionado
+	 * 
+	 * @param id_coche ID del coche para visualizar pasajeros asociados
+	 * @return List>> Devuelve lista de pasajeros asociados
+	 */
+	public List<Pasajero> listar_asignados(int id_coche) {
+		// TODO Auto-generated method stub
+		conexion = conectar.abrirConexion(conexion);
+		if (conexion == null) {
+			return null;
+		}
+		List<Pasajero> pasajeros_asignados = new ArrayList<>();
+		String query = "SELECT id,nombre FROM pasajero WHERE `id_coche`=?";
+		try (PreparedStatement ps = conexion.prepareStatement(query);) {
+			ps.setInt(1, id_coche);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				Pasajero p = new Pasajero();
+				p.setId_pasajero(rs.getInt(1));
+				p.setNombre(rs.getString(2));
+				pasajeros_asignados.add(p);
+			}
+			return pasajeros_asignados;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return pasajeros_asignados;
 	}
 }
