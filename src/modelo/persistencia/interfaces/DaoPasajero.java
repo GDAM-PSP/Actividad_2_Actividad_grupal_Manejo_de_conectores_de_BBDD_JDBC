@@ -15,7 +15,11 @@ public interface DaoPasajero {
 
 	public boolean asignar(int id_pasajero, int id_coche);
 
-	public List<Pasajero> listar_asignados(int id_coche);
+	public boolean desasignar(int id_pasajero);
+
+	public List<Pasajero> listar_asignado(int id_coche);
+
+	public List<Pasajero> listar_asignados();
 
 	public List<Pasajero> listar();
 }

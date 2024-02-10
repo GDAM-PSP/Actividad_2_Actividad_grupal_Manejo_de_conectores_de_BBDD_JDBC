@@ -175,20 +175,19 @@ public class DaoPasajeroMySql implements DaoPasajero {
 		return asignar;
 	}
 
-	@Override
 	/**
 	 * Metodo para listar los pasajeros asociados al coche seleccionado
 	 * 
 	 * @param id_coche ID del coche para visualizar pasajeros asociados
 	 * @return List>> Devuelve lista de pasajeros asociados
 	 */
-	public List<Pasajero> listar_asignados(int id_coche) {
+	public List<Pasajero> listar_asignado(int id_coche) {
 		// TODO Auto-generated method stub
 		conexion = conectar.abrirConexion(conexion);
 		if (conexion == null) {
 			return null;
 		}
-		List<Pasajero> pasajeros_asignados = new ArrayList<>();
+		List<Pasajero> pasajeros_asignado = new ArrayList<>();
 		String query = "SELECT id,nombre FROM pasajero WHERE `id_coche`=?";
 		try (PreparedStatement ps = conexion.prepareStatement(query);) {
 			ps.setInt(1, id_coche);
@@ -197,8 +196,78 @@ public class DaoPasajeroMySql implements DaoPasajero {
 				Pasajero p = new Pasajero();
 				p.setId_pasajero(rs.getInt(1));
 				p.setNombre(rs.getString(2));
-				pasajeros_asignados.add(p);
+				pasajeros_asignado.add(p);
 			}
+			return pasajeros_asignado;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return pasajeros_asignado;
+	}
+
+	@Override
+
+	/**
+	 * Metodo para desasignar los pasajeros
+	 * 
+	 * @param id_coche ID del coche para visualizar pasajeros asignados
+	 * @return List>> Devuelve lista de pasajeros // coches asignados
+	 */
+	public boolean desasignar(int id_pasajero) {
+
+		// SOLO VAMOS A MOSTRAR COCHES CON PASAJEROS
+//
+//		conexion = conectar.abrirConexion(conexion);
+//		if (conexion == null) {
+//			return false;
+//		}
+//		List<Pasajero> pasajeros_asignados = new ArrayList<>();
+//		String query = "SELECT id,nombre,id_coche FROM pasajero WHERE IS NOT NULL";
+//		try (PreparedStatement ps = conexion.prepareStatement(query);) {
+//			ResultSet rs = ps.executeQuery();
+//			while (rs.next()) {
+//				Pasajero p = new Pasajero();
+//				p.setId_pasajero(rs.getInt(1));
+//				p.setNombre(rs.getString(2));
+//				p.setId_coche(rs.getInt(3));
+//				pasajeros_asignados.add(p);
+//			}
+//			System.out.println(pasajeros_asignados.toString());
+//		} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+		return false;
+	}
+
+	@Override
+	public List<Pasajero> listar_asignados() {
+		// TODO Auto-generated method stub
+		conexion = conectar.abrirConexion(conexion);
+		if (conexion == null) {
+			return null;
+		}
+		List<Pasajero> pasajeros_asignados = new ArrayList<>();
+		String query = "SELECT id,nombre,id_coche FROM pasajero WHERE `id_coche`IS NOT NULL";
+		String query2 = "SELECT id,nombre FROM pasajero WHERE `id_coche`IS NOT NULL";
+		// TODO Auto-generated method stub
+		try (PreparedStatement ps = conexion.prepareStatement(query);) {
+			// ps.setInt(1, id_coche);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				Pasajero p = new Pasajero();
+				p.setId_pasajero(rs.getInt(1));
+				p.setNombre(rs.getString(2));
+				p.setId_coche(3);
+				pasajeros_asignados.add(p);
+				ArrayList<Integer> lista_ids = new ArrayList<Integer>();
+				for (Pasajero p_aux : pasajeros_asignados) {
+					int id_coche = p_aux.getId_coche();
+					lista_ids.add(id_coche);
+				}
+			}
+
 			return pasajeros_asignados;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

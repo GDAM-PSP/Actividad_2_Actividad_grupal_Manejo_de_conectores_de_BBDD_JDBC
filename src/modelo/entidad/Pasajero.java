@@ -5,17 +5,26 @@ public class Pasajero {
 	private String nombre;
 	private int edad;
 	private float peso;
+	private int id_coche;
 
 	public Pasajero() {
 
 	}
 
-	public Pasajero(int id_pasajero, String nombre, int edad, float peso) {
+	public Pasajero(int id_pasajero, String nombre, int edad, float peso, int id_coche) {
 		super();
 		this.id_pasajero = id_pasajero;
 		this.nombre = nombre;
 		this.edad = edad;
 		this.peso = peso;
+	}
+
+	public int getId_coche() {
+		return id_coche;
+	}
+
+	public void setId_coche(int id_coche) {
+		this.id_coche = id_coche;
 	}
 
 	public int getId_pasajero() {
@@ -52,8 +61,8 @@ public class Pasajero {
 
 	@Override
 	public String toString() {
-		return "PASAJERO:" + "   ID: " + id_pasajero + "   Nombre: " + nombre + "   Edad: " + edad + "   peso: "
-				+ peso + "\n";
+		return "PASAJERO:" + "   ID: " + id_pasajero + "   Nombre: " + nombre + "   Edad: " + edad + "   peso: " + peso
+				+ "\n";
 	}
 
 }
