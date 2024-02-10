@@ -1,5 +1,6 @@
 package modelo.negocio;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import modelo.entidad.Coche;
@@ -9,6 +10,7 @@ import modelo.persistencia.interfaces.DaoPasajero;
 
 public class GestorPasajero {
 	private DaoPasajero daoPasajero = new DaoPasajeroMySql();
+	private GestorCoche gestorCoche = new GestorCoche();
 
 	/**
 	 * Metodo que recibe el objeto Pasajero de la vista para solicitar a DAO la
@@ -72,20 +74,22 @@ public class GestorPasajero {
 	 * @return true/false >> Devuele boolean si la asignación fue correcta
 	 */
 	public boolean asignar(int id_pasajero, int id_coche) {
-		boolean asignado = false;
-		if (daoPasajero.asignar(id_pasajero, id_coche))
-			return asignado;
-		return asignado;
+		return daoPasajero.asignar(id_pasajero, id_coche);
 	}
 
 	public List<Pasajero> listar_asignado(int id_coche) {
 		List<Pasajero> pasajero = daoPasajero.listar_asignado(id_coche);
 		return pasajero;
 	}
+	
+	public List<Pasajero> listar_asignados_coche() {
+		List<Pasajero> pasajeros = daoPasajero.listar_asignados_coche();		
+		
+		return pasajeros;
+	}
 
 	public boolean desasignar(int id_pasajero) {
-		daoPasajero.desasignar(id_pasajero);
-		return false;
+		return daoPasajero.desasignar(id_pasajero);
 
 	}
 }

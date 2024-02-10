@@ -1,12 +1,10 @@
 package modelo.negocio;
 
-import modelo.persistencia.interfaces.*;
-
-import java.util.ArrayList;
 import java.util.List;
 
 import modelo.entidad.Coche;
-import modelo.persistencia.*;
+import modelo.persistencia.DaoCocheMySql;
+import modelo.persistencia.interfaces.DaoCoche;
 
 public class GestorCoche {
 
@@ -21,16 +19,11 @@ public class GestorCoche {
 	 *         caso de algun error de conexion a la base de datos y 2 en caso de que
 	 *         el coche no tenga marca o modelo.
 	 */
-	public int anadir(Coche c) {
+	public boolean anadir(Coche c) {
 		if (!c.getMarca().isEmpty() && !c.getModelo().isEmpty()) {
-			boolean alta = daoCoche.anadir(c);
-			if (alta) {
-				return 0;
-			} else {
-				return 1;
-			}
+			return daoCoche.anadir(c);
 		} else {
-			return 2;
+			return false;
 		}
 	}
 
@@ -42,8 +35,7 @@ public class GestorCoche {
 	 */
 
 	public boolean borrar(int id) {
-		boolean baja = daoCoche.borrar(id);
-		return baja;
+		return daoCoche.borrar(id);
 	}
 
 	/**
@@ -55,16 +47,11 @@ public class GestorCoche {
 	 *         de algun error de conexion a la base de datos y 2 en caso de que el
 	 *         coche no tenga marca o modelo.
 	 */
-	public int modificar(Coche c) {
+	public boolean modificar(Coche c) {
 		if (!c.getMarca().isEmpty() && !c.getModelo().isEmpty()) {
-			boolean modificado = daoCoche.modificar(c);
-			if (modificado) {
-				return 0;
-			} else {
-				return 1;
-			}
+			return daoCoche.modificar(c);
 		} else {
-			return 2;
+			return false;
 		}
 	}
 
