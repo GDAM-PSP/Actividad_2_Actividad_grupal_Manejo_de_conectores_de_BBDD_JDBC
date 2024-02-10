@@ -186,7 +186,7 @@ public class DaoPasajeroMySql implements DaoPasajero {
 			return null;
 		}
 		List<Pasajero> pasajeros_asignado = new ArrayList<>();
-		String query = "SELECT id,nombre FROM pasajero WHERE `id_coche`=?";
+		String query = "SELECT * FROM pasajero WHERE `id_coche`=?";
 		try (PreparedStatement ps = conexion.prepareStatement(query);) {
 			ps.setInt(1, id_coche);
 			ResultSet rs = ps.executeQuery();
@@ -194,6 +194,8 @@ public class DaoPasajeroMySql implements DaoPasajero {
 				Pasajero p = new Pasajero();
 				p.setId_pasajero(rs.getInt(1));
 				p.setNombre(rs.getString(2));
+				p.setEdad(rs.getInt(3));
+				p.setPeso(rs.getFloat(4));
 				pasajeros_asignado.add(p);
 			}
 			return pasajeros_asignado;

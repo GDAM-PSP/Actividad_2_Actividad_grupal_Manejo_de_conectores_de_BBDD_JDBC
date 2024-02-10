@@ -78,9 +78,9 @@ public class Main {
 				caux.setKm(sc.nextInt());
 				boolean mod = gestorCoche.modificar(caux);
 				if (mod)
-					System.out.println("El coche no ha sido agregado, revise los datos *MARCA *MODELO ");
-				else
 					System.out.println("Coche modificado con éxito");
+				else
+					System.out.println("El coche no ha sido agregado, revise los datos *MARCA *MODELO ");
 				TimeUnit.SECONDS.sleep(2);
 				break;
 
